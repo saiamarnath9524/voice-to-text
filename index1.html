@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice to Text Converter</title>
+    <style>
+        /* General page styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Container styling */
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Heading styling */
+        h1 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 20px;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        /* Paragraph styling */
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Button styling */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+            animation: buttonAppear 0.8s ease-in-out;
+        }
+
+        /* Disabled button style */
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+
+        /* Button hover effect */
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+        }
+
+        /* Output area styling */
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            height: 100px;
+            width: 100%;
+            overflow-y: auto;
+            font-size: 16px;
+            color: #333;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            animation: fadeInText 1s ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateX(-50px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes buttonAppear {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeInText {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Voice to Text Converter</h1>
+        <p>Click the button to start speaking and another button to stop.</p>
+        <button id="startBtn">Start Listening</button>
+        <button id="stopBtn" disabled>Stop Listening</button>
+        
+        <div id="output" contenteditable="true">Your speech will appear here...</div>
+    </div>
+
+    <script>
+        // Check if the browser supports the Web Speech API
+        var recognition;
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition(); // For Chrome/Chromium
+        } else {
+            alert("Speech Recognition API not supported in this browser.");
+        }
+
+        recognition.continuous = true; // Keep recognizing speech until stopped
+        recognition.interimResults = true; // Show interim results while speaking
+
+        // Start recognition when the start button is clicked
+        document.getElementById("startBtn").addEventListener("click", function() {
+            recognition.start();
+            document.getElementById("output").innerText = "Listening... Please speak.";
+            document.getElementById("startBtn").disabled = true; // Disable start button while listening
+            document.getElementById("stopBtn").disabled = false; // Enable stop button
+        });
+
+        // Stop recognition when the stop button is clicked
+        document.getElementById("stopBtn").addEventListener("click", function() {
+            recognition.stop();
+            document.getElementById("startBtn").disabled = false; // Enable start button again
+            document.getElementById("stopBtn").disabled = true; // Disable stop button
+            document.getElementById("output").innerText += " (Recognition stopped)";
+        });
+
+        // Event listener for when speech recognition gives a result
+        recognition.onresult = function(event) {
+            var transcript = '';
+            // Loop through the results from the speech recognition
+            for (var i = event.resultIndex; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            document.getElementById("output").innerText = transcript;
+        };
+
+        // Event listener for when speech recognition ends (e.g., user stops speaking)
+        recognition.onend = function() {
+            document.getElementById("output").innerText += " (Recognition ended)";
+            document.getElementById("startBtn").disabled = false; // Enable start button again
+            document.getElementById("stopBtn").disabled = true; // Disable stop button
+        };
+
+        // Event listener for errors in speech recognition
+        recognition.onerror = function(event) {
+            document.getElementById("output").innerText = "Error: " + event.error;
+        };
+    </script>
+
+</body>
+</html>
