@@ -124,27 +124,27 @@
         // Check if the browser supports the Web Speech API
         var recognition;
         if ('webkitSpeechRecognition' in window) {
-            recognition = new webkitSpeechRecognition(); // For Chrome/Chromium
+            recognition = new webkitSpeechRecognition(); 
         } else {
             alert("Speech Recognition API not supported in this browser.");
         }
 
-        recognition.continuous = true; // Keep recognizing speech until stopped
-        recognition.interimResults = true; // Show interim results while speaking
+        recognition.continuous = true;
+        recognition.interimResults = true; 
 
         // Start recognition when the start button is clicked
         document.getElementById("startBtn").addEventListener("click", function() {
             recognition.start();
             document.getElementById("output").innerText = "Listening... Please speak.";
-            document.getElementById("startBtn").disabled = true; // Disable start button while listening
-            document.getElementById("stopBtn").disabled = false; // Enable stop button
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("stopBtn").disabled = false; 
         });
 
         // Stop recognition when the stop button is clicked
         document.getElementById("stopBtn").addEventListener("click", function() {
             recognition.stop();
-            document.getElementById("startBtn").disabled = false; // Enable start button again
-            document.getElementById("stopBtn").disabled = true; // Disable stop button
+            document.getElementById("startBtn").disabled = false;
+            document.getElementById("stopBtn").disabled = true; 
             document.getElementById("output").innerText += " (Recognition stopped)";
         });
 
@@ -161,8 +161,8 @@
         // Event listener for when speech recognition ends (e.g., user stops speaking)
         recognition.onend = function() {
             document.getElementById("output").innerText += " (Recognition ended)";
-            document.getElementById("startBtn").disabled = false; // Enable start button again
-            document.getElementById("stopBtn").disabled = true; // Disable stop button
+            document.getElementById("startBtn").disabled = false; 
+            document.getElementById("stopBtn").disabled = true; 
         };
 
         // Event listener for errors in speech recognition
