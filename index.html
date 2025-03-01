@@ -121,7 +121,7 @@
     </div>
 
     <script>
-        // Check if the browser supports the Web Speech API
+
         var recognition;
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition(); 
@@ -132,7 +132,6 @@
         recognition.continuous = true;
         recognition.interimResults = true; 
 
-        // Start recognition when the start button is clicked
         document.getElementById("startBtn").addEventListener("click", function() {
             recognition.start();
             document.getElementById("output").innerText = "Listening... Please speak.";
@@ -140,15 +139,13 @@
             document.getElementById("stopBtn").disabled = false; 
         });
 
-        // Stop recognition when the stop button is clicked
+    
         document.getElementById("stopBtn").addEventListener("click", function() {
             recognition.stop();
             document.getElementById("startBtn").disabled = false;
             document.getElementById("stopBtn").disabled = true; 
             document.getElementById("output").innerText += " (Recognition stopped)";
         });
-
-        // Event listener for when speech recognition gives a result
         recognition.onresult = function(event) {
             var transcript = '';
             // Loop through the results from the speech recognition
@@ -158,14 +155,14 @@
             document.getElementById("output").innerText = transcript;
         };
 
-        // Event listener for when speech recognition ends (e.g., user stops speaking)
+    
         recognition.onend = function() {
             document.getElementById("output").innerText += " (Recognition ended)";
             document.getElementById("startBtn").disabled = false; 
             document.getElementById("stopBtn").disabled = true; 
         };
 
-        // Event listener for errors in speech recognition
+       
         recognition.onerror = function(event) {
             document.getElementById("output").innerText = "Error: " + event.error;
         };
